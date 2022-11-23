@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62" height="62" viewBox="0 0 62 62">
+  <defs>
+    <clipPath id="clip-building2">
+      <rect width="62" height="62"/>
+    </clipPath>
+  </defs>
+  <g id="building2" clip-path="url(#clip-building2)">
+    <rect width="62" height="62" fill="#fff"/>
+    <path id="Subtraction_1" data-name="Subtraction 1" d="M-5271-3122h-9v-31l31.052-20,30.949,20v31h-9v-26.2h-44v26.2Z" transform="translate(5280 3179)"/>
+  </g>
+</svg>

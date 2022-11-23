@@ -1,0 +1,49 @@
+version: '3.5'
+services:
+
+  #PHP Service
+  php_dev:
+    build:
+      context: .
+      dockerfile: docker/web/dev.Dockerfile
+      args:
+        FQDNDEV: ${FQDNDEV}
+    command: "php-fpm"
+    restart: always
+    tty: true
+    networks:
+      - careox_net
+    environment:
+      SERVICE_NAME: php_dev
+      SERVICE_TAGS: dev
+      FQDNDEV: ${FQDNDEV}
+    working_dir: /var/www/${FQDNDEV}
+    volumes:
+      - ./:/var/www/${FQDNDEV}
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+
+  #Supervisor
+  supervisor_dev:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+      args:
+        FQDNDEV: ${FQDNDEV}
+    command: "sudo supervisord -c /etc/supervisor/supervisord.conf"
+    restart: always
+    tty: true
+    networks:
+      - careox_net
+    environment:
+      SERVICE_NAME: supervisor_dev
+      SERVICE_TAGS: dev
+      FQDNDEV: ${FQDNDEV}
+    working_dir: /var/www/${FQDNDEV}
+    volumes:
+      - ./:/var/www/${FQDNDEV}
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./docker/supervisor/dev.conf.d/:/etc/supervisor/conf.d/
+
+networks:
+  careox_net:
+    external: true

@@ -1,0 +1,97 @@
+version: '3.5'
+services:
+
+  #PHP Service
+  php:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+      args:
+        FQDN: ${FQDN}
+        SUPR_CONF_DI: ${SUPR_CONF_DI}
+    command: "php-fpm"
+    restart: always
+    tty: true
+    networks:
+      - careox_net
+    environment:
+      SERVICE_NAME: php
+      SERVICE_TAGS: dev
+      FQDN: ${FQDN}
+      WORKING_DIRECTORY: ${FQDN}
+      SUPR_CONF_DI: ${SUPR_CONF_DI}
+    working_dir: /var/www/${FQDN}
+    volumes:
+      - ./:/var/www/${FQDN}
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+
+    #Nginx Service
+  nginx_server:
+    restart: unless-stopped
+    image: staticfloat/nginx-certbot
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+    environment:
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      # variable names are space-separated
+      ENVSUBST_VARS: FQDNDEV FQDN DEV_SERVICE_NAME
+      FQDNDEV: ${FQDNDEV}
+      FQDN: ${FQDN}
+      DEV_SERVICE_NAME: php_dev
+    networks:
+      - careox_net
+    volumes:
+      - ./docker/nginx/user.conf.d/:/etc/nginx/user.conf.d:ro
+      - ./letsencrypt:/etc/letsencrypt
+      - ./:/var/www/${FQDN}
+      - ../careox-dev/:/var/www/${FQDNDEV}
+      - ./docker/nginx/localhost/:/etc/letsencrypt/live/localhost/
+  #    volumes:
+  #      - ./docker/nginx/user.conf.d/:/etc/nginx/user.conf.d:ro
+  #      - ./letsencrypt:/etc/letsencrypt
+  #      - ./:/var/www
+  #      - ./docker/nginx/localhost/:/etc/letsencrypt/live/localhost/
+  #Supervisor
+  supervisor:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+      args:
+        FQDNDEV: ${FQDN}
+        SUPR_CONF_DI: ${SUPR_CONF_DI}
+    command: "sudo supervisord -c /etc/supervisor/supervisord.conf"
+    restart: always
+    tty: true
+    environment:
+      SERVICE_NAME: supervisor
+      SERVICE_TAGS: dev
+      FQDNDEV: ${FQDNDEV}
+      SUPR_CONF_DI: ${SUPR_CONF_DI}
+    working_dir: /var/www/${FQDN}
+    networks:
+      - careox_net
+    volumes:
+      - ./:/var/www/${FQDN}
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./docker/supervisor/${SUPR_CONF_DI}/:/etc/supervisor/conf.d/
+
+#  #MariaDb Service
+#  mariadb:
+#    image: 'docker.io/bitnami/mariadb:10.1-debian-10'
+#    ports:
+#    - $DB_PORT:3306
+#    environment:
+#    - ALLOW_EMPTY_PASSWORD=yes
+#    - MARIADB_USER=$DB_USERNAME
+#    - MARIADB_DATABASE=$DB_DATABASE
+#    - MARIADB_PASSWORD=$DB_PASSWORD
+
+volumes:
+  letsencrypt:
+  dbdata:
+    driver: local
+
+networks:
+  careox_net:
+    name: careox_net

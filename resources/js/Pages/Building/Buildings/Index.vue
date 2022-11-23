@@ -1,0 +1,369 @@
+<template>
+  <admin-layout>
+    <div class="d-flex">
+      <p class=" float-start">
+
+        <inertia-link :href="route('building.create')" class="btn btn-primary" data-repeater-create="">
+          Add Building
+        </inertia-link>
+      </p>
+      <br />
+    </div>
+    <div class="row pb-3" id="table-hover-row">
+      <div class="col-12">
+        <div class="card-one py-0 my-0 bg-white">
+          <div class="card-content">
+            <div data-repeater-list="group-a">
+              <div>
+                <div class="top d-flex flex-wrap">
+                  <div class="action-filters flex-grow-1">
+                    <div id="DataTables_Table_0_filter" class="dataTables_filter">
+                      <div class="input-group form-group d-flex position-relative mt-1 px-2 pr-md-0">
+                        <input type="text" class="form-control border-light-gray btn-height" placeholder="Search..."
+                          aria-label="Search" aria-describedby="basic-addon2" v-model="query.query" @change="search">
+                        <div class="input-group-append">
+                          <button class="input-group-text search-btn" @change="search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round" class="feather feather-search feather-16 pb-0 mb-0 mt-0">
+                              <circle cx="11" cy="11" r="8"></circle>
+                              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="
+                    actions
+                    action-btns
+                    d-flex
+                    align-items-center
+                    flex flex-wrap
+                    filter-container
+                    pl-1
+                  ">
+              <div class="actions action-btns d-flex align-items-center sort-dropdown pl-1">
+                                        <div class="dropdown w-100 pr-2 sort-dropdown2">
+                      <button class="btn border dropdown-toggle w-100" type="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Sort
+                      </button>
+                      <div class="
+                        dropdown-menu dropdown-menu-right
+                        py-0
+                        my-0
+                        custom-dropdown
+                      " aria-labelledby="" @click="stopPropagation">
+                        <div class="col-12 pl-2 pt-1">
+                          <div class="d-inline-flex w-100">
+                            <h6 class="py-0 my-0">Sort</h6>
+                            <span class="primary pl-20 ml-2 pointer" @click="resetSort">Reset</span>
+                          </div>
+                          <div class="text-base pt-1">
+                            <p class="tag">
+                              <input type="checkbox" name="code" id="code" v-model=" query.code" v-on:click="check_one()" />
+                              <label class="pl-1 py-0 my-0" for="code">Code</label>
+
+                            </p>
+                            <p class="tag">
+                              <input type="checkbox" name="address_1" id="address_1" v-model="query.address_1" v-on:click="check_one()" />
+                              <label class="pl-1 py-0 my-0" for="address_1">Address</label>
+                            </p>
+                            <p class="tag">
+                              <input type="checkbox" name="phone" id="phone" v-model="query.phone " v-on:click="check_one()" />
+                              <label class="pl-1 py-0 my-0" for="phone">Phone</label>
+                            </p>
+
+                          </div>
+                        </div>
+                        <div class="dropdown-divider py-0 my-0"></div>
+                        <div class="col-12 pl-2 d-inline-flex">
+                          <p class="pt-1">
+                            <button type="button" id="asce" @click="sort('asc')" class="
+                              btn btn-sm btn-primary
+                              font-small font-weight-normal
+                              stock-order
+                            ">
+                              Asc
+                            </button>
+                          </p>
+                          <p class="pt-1 pl-3">
+                            <button type="button" id="desc" @click="sort('desc')" class="
+                              btn btn-sm btn-light-secondary
+                              font-small font-weight-normal
+                              stock-order
+                            ">
+                              Desc
+                            </button>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card">
+          <div class="card-content">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th class="custom-padding">Code</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th class="text-right py-0 my-0 custom-padding-right">
+                      <span class="d-inline-flex align-items-center">
+                        <inertia-link :href="route('building.import.export')">
+                          <span class="badge-circle badge-circle-light-secondary action">
+                            <i class="bx bx-upload font-medium-1 align-items-center text-center"></i>
+                          </span>
+                        </inertia-link>
+                        <a :href="route('building.all.export')">
+                          <span class="badge-circle badge-circle-light-secondary  action">
+                            <i class="bx bx-download font-medium-1 align-items-center text-center"></i>
+                          </span>
+                        </a>
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="building in buildings.data" v-if="buildings.data.length > 0">
+                    <td class=" custom-padding">{{building.code}}</td>
+                    <td class=" text-truncate">{{building.address_1}} {{building.address_2}},
+                      {{building.city}},
+                      {{building.state}}, {{building.country}}, {{building.zip_code}}</td>
+                    <td class=" text-truncate">{{building.phone}}</td>
+                    <td class="text-right  custom-padding-right">
+                      <div class="dropdown">
+                    <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu" data-boundary="window">
+                    </span>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a :href="route('building.show',building.code)" class="dropdown-item"><i class="bx bx-show mr-1"></i>Show</a>
+                    <a :href="route('building.edit',building.id)" class="dropdown-item"><i class="bx bx-edit-alt mr-1"></i>Edit</a>
+                    <a class="dropdown-item" v-on:click="confirmDelete(building.id)"><i class="bx bx-trash mr-1"></i>Delete</a>
+                    </div>
+                    </div>                
+                    </td>
+                  </tr>
+                  <tr class="" v-else>
+                    <td colspan="4" class="  text-center h4  mx-auto my-1">No building Exist
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     <ConfirmatiomModal v-if="sweetAlert" :sweetAlert="sweetAlert" @clicked="Clicked" @deleteitem="deleteItem">
+      </ConfirmatiomModal>
+      <div class="col-12 ">
+        <pagination :links="buildings.links" class="float-right"></pagination>
+      </div>
+
+    </div>
+
+  </admin-layout>
+</template>
+
+<script>
+  import moment from 'moment';
+  import AdminLayout from "../../../Layouts/AdminLayout";
+  import Button from "../../../Jetstream/Button";
+  import Pagination from "../../../admin/Pagination";
+  import ConfirmatiomModal from "../../SweetAlert/ConfirmatiomModal";
+  import DeletedModal from "../../SweetAlert/DeletedModal";
+
+  export default {
+    name: "index",
+    props: [
+      "buildings",
+      "params"
+    ],
+    components: {
+      Button,
+      AdminLayout,
+      Pagination,
+      ConfirmatiomModal,
+    },
+    data() {
+
+      return {
+        query: {
+          query: "",
+          id: false,
+          code: false,
+          address_1: false,
+          phone: false,
+          enable: false,
+          disable: false,
+          direction: null,
+        },
+        sweetAlert: false,
+        itemId: "",
+        searchItem: false,
+      };
+    },
+
+    beforeMount() {
+      document.title = process.env.MIX_APP_NAME + " - Buildings";
+    },
+
+    mounted() {
+      if (this.params) {
+        Object.assign(this.query, this.params);
+      }
+    },
+
+    methods: {
+      resetQuery() {
+        this.query = {};
+        this.loadData();
+      },
+      Clicked() {
+        this.sweetAlert = false;
+      },
+      deleteItem() {
+        this.sweetAlert = false;
+        this.$inertia.delete(`/fulfilment/admin/building/${this.itemId}`);
+      },
+      confirmDelete(id) {
+        this.sweetAlert = true;
+        this.itemId = id;
+      },
+      stopPropagation(e) {
+        e.stopPropagation();
+      },
+      resetSort(e) {
+        this.query.direction = "";
+        this.query.code = "";
+        this.query.address_1 = "";
+        this.query.phone = "";
+        this.loadData();
+      },
+      resetFilter() {
+        this.query = {};
+        this.query.id = "";
+        this.query.code = "";
+        this.query.address_1 = "";
+        this.query.phone = "";
+        this.query.direction = "";
+        this.query.enable = "";
+        this.query.disable = "";
+        this.loadData();
+      },
+      search() {
+        this.searchItem = true;
+        this.loadData();
+      },
+      filter() {
+        this.loadData();
+      },
+      sort(direction) {
+        this.query.direction = direction;
+        this.loadData();
+      },
+      check_one: function () {
+      if ((this.query.code = false)) {
+        this.query.code = true;
+        this.query.address_1 = [];
+        this.query.phone = [];
+      }
+      if ((this.query.address_1 = false)) {
+        this.query.address_1 = true;
+        this.query.code = [];
+        this.query.phone = [];
+      }
+      if ((this.query.phone = false)) {
+        this.query.phone = true;
+        this.query.code = [];
+      }
+      },
+      loadData() {
+        let query = {};
+        for (let item in this.query) {
+          if (this.query[item]) {
+            Object.assign(query, {
+              [item]: this.query[item],
+            });
+          }
+        }
+        this.$inertia.visit(route("building.index"), {
+          method: "get",
+          data: {
+            ...query,
+          },
+        });
+      },
+    },
+  };
+</script>
+
+<style scoped>
+  .custom-padding {
+    padding-left: 24px;
+  }
+
+  .custom-padding-right {
+    padding-right: 24px;
+  }
+
+  .action {
+    margin-right: 4px !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
+  }
+
+  .card {
+    border: 1px solid #d2d6dc;
+    border-radius: 0px !important;
+  }
+
+  .card-one {
+    border: 1px solid #d2d6dc;
+    border-bottom: 0px;
+  }
+
+  table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #d2d6dc;
+  }
+
+  .custom-dropdown {
+    margin-top: 0.5rem !important;
+  }
+
+  img :hover {
+    transform: scale(3, 3);
+  }
+
+  @media (max-width: 575.98px) {
+    .filter-container {
+      width: 100% !important;
+      padding-right: 22px !important;
+      padding-left: 11px !important;
+    }
+
+    .filter-dropdown {
+      width: 100% !important;
+      padding-right: 0px !important;
+      padding-left: 11px !important;
+    }
+
+    .sort-dropdown {
+      width: 100% !important;
+      padding-left: 11px !important;
+      padding-right: 0px !important;
+      padding-top: 15px !important;
+    }
+  }
+</style>

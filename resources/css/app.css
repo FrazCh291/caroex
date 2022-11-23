@@ -1,0 +1,125 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import "../../node_modules/vue-multiselect/dist/vue-multiselect.min.css";
+
+.careox-bg {
+    background-color: #F2F4F4;
+}
+
+.no-resize {
+    resize: none !important;
+}
+
+body {
+    font-family: "Rubik", Helvetica, Arial, serif;
+    font-size: 14px;
+}
+
+.text-small {
+    font-size: 80% !important;
+    font-weight: 400 !important;
+}
+
+.page-color {
+    background-color: #FAFBFB;
+}
+
+.tag {
+    line-height: 1rem;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    padding-bottom: 11px !important;
+    padding-top: 0px !important;
+}
+
+.form-select {
+    display: block;
+    width: 100%;
+    height: calc(1.4em + 0.94rem + 3.7px);
+    padding: 0.47rem 0.8rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #475f7b;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #DFE3E7;
+    border-radius: 0.267rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.underline-dotted {
+    border-bottom: 1px !important;
+    border-style: dashed !important;
+    padding-bottom: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+html .navbar-sticky .app-content .content-wrapper {
+    /*z-index: 99 !important;*/
+    /*position: fixed !important;*/
+}
+
+.tag {
+    line-height: 1rem;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    padding-bottom: 11px !important;
+    padding-top: 0px !important;
+}
+
+.popover {
+    min-width: max-content !important;
+    max-width: max-content !important;
+}
+
+.popover-body {
+    padding: 10px !important;
+}
+
+.custom-dropdown {
+    margin-top: 0.5rem !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.search-btn {
+    background-color: #E6EAEE !important;
+    color: #475F7B !important;
+    outline: none !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.search-input {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.export-btn {
+    padding-right: 9px !important;
+}
+
+.card {
+    border: 1px solid #d2d6dc !important;
+    border-radius: 0px !important;
+}
+
+.table-heading {
+    vertical-align: bottom !important;
+    border-bottom: 1px solid #d2d6dc !important;
+}
+
+.padding-change {
+    margin-bottom: 10px !important;
+}
+
+.building-icons {
+    display: inline;
+    padding-bottom: 6px;
+    width: 22px;
+    height: 22px;
+}

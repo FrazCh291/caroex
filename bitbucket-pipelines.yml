@@ -1,0 +1,51 @@
+# This is a sample build configuration for PHP.
+# Check our guides at https://confluence.atlassian.com/x/e8YWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+
+# You can specify a custom docker image from Docker Hub as your build environment.
+
+
+pipelines:
+  branches:
+    develop:
+      - step:
+          caches:
+            - docker
+          script:
+            - pipe: atlassian/ssh-run:0.4.0
+              variables:
+                SSH_USER: $Develop_Username
+                SERVER: $Develop_Host
+                DEBUG: 'true'
+                MODE: 'command'
+                COMMAND: 'cd ~/workspace/careox-v2 && git checkout -- . && git pull && chmod +x deployment.sh && ./deployment.sh'
+          services:
+            - docker
+    master:
+      - step:
+          caches:
+            - docker
+          script:
+            - pipe: atlassian/ssh-run:0.4.0
+              variables:
+                SSH_USER: $Prod_Username
+                SERVER: $Prod_Host
+                DEBUG: 'true'
+                MODE: 'command'
+                COMMAND: 'cd ~/careox-v2 && git checkout -- . && git pull && chmod +x deployment.sh && ./deployment.sh'
+          services:
+            - docker
+      - step:
+          caches:
+            - docker
+          script:
+            - pipe: atlassian/ssh-run:0.4.0
+              variables:
+                SSH_USER: $Prod_Username
+                SERVER: $Prod_Host
+                DEBUG: 'true'
+                MODE: 'command'
+                COMMAND: 'cd ~/careox-dev && git checkout -- . && git pull origin master && chmod +x dev-deployment.sh && ./dev-deployment.sh'
+          services:
+            - docker
